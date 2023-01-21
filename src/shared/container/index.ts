@@ -1,3 +1,4 @@
+import { IPaymentRepositories } from '@modules/payment/repositories/IPaymentRespository';
 import { IUsersRepository } from '@modules/users/repositories/IUsersRespository';
 import { UsersRespository } from '@modules/users/repositories/UsersRespository';
 import { S3Storage } from '@shared/StorageProvider/implementations/S3Storage';

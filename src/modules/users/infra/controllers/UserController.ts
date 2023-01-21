@@ -12,6 +12,19 @@ export class UserController {
   async create(req: Request, res: Response): Promise<Response> {
     const service = container.resolve(CreateUserService);
 
+    const {
+      name,
+      email,
+      password,
+      midle_name,
+      street,
+      bairro,
+      number_home,
+      city,
+      state,
+      cep,
+    } = req.body;
+
     const api = axios.create({
       baseURL: 'https://sandbox.api.pagseguro.com/orders',
     });
@@ -22,7 +35,7 @@ export class UserController {
       .post('', {
         reference_id: 'ex-00001',
         customer: {
-          name: 'Jose da Silva',
+          name,
           email: 'email@test.com',
           tax_id: '12345678909',
           phones: [
@@ -53,19 +66,6 @@ export class UserController {
       })
       .then(h => console.log(h.status))
       .catch(h => console.log(h.status, h.statusText));
-
-    const {
-      name,
-      email,
-      password,
-      midle_name,
-      street,
-      bairro,
-      number_home,
-      city,
-      state,
-      cep,
-    } = req.body;
 
     const user = await service.execute({
       name,
