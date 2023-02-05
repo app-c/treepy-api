@@ -12,7 +12,7 @@ export interface IProfileDto {
   avatar: string;
 }
 
-export interface ICustumer {}
+// export interface ICustumer {}
 
 export interface IEndDto {
   street: string;
@@ -89,4 +89,4 @@ export interface PropsCard {
   ];
 }
 
-export interface PropsPix {}
+// export interface PropsPix {}

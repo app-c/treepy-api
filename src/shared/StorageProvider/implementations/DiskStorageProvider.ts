@@ -7,23 +7,23 @@ import path from 'path';
 import IStorageProvider from '../models/IStorageProviders';
 
 export class DiskStorageProvider implements IStorageProvider {
-   // TODO SALVAR ARQUIVO
-   async saveFile(file: string, folder: string): Promise<string> {
-      await fs.promises.rename(
-         path.resolve(upload.tmpFolder, file),
-         path.resolve(`${upload.tmpFolder}/${folder}`, file),
-      );
+  // TODO SALVAR ARQUIVO
+  async saveFile(file: string, folder: string): Promise<string> {
+    await fs.promises.rename(
+      path.resolve(upload.tmpFolder, file),
+      path.resolve(`${upload.tmpFolder}/${folder}`, file),
+    );
 
-      return file;
-   }
+    return file;
+  }
 
-   // TODO DELETAR ARQUIVO
-   async deleteFile(file: string, folder: string): Promise<void> {
-      const filename = path.resolve(`${upload.tmpFolder}/${folder}`, file);
+  // TODO DELETAR ARQUIVO
+  async deleteFile(file: string, folder: string): Promise<void> {
+    const filename = path.resolve(`${upload.tmpFolder}/${folder}`, file);
 
-      try {
-         await fs.promises.stat(filename);
-      } catch (error) {}
-      await fs.promises.unlink(filename);
-   }
+    try {
+      await fs.promises.stat(filename);
+    } catch (error) {}
+    await fs.promises.unlink(filename);
+  }
 }

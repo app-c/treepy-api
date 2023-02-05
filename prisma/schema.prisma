@@ -13,7 +13,7 @@ generator client {
 model User {
   id         String   @id @default(uuid())
   name       String
-  midle_name String   @unique
+  midle_name String
   email      String
   password   String
   end        End?
@@ -23,7 +23,7 @@ model User {
 model End {
   id          String @id @default(uuid())
   street      String
-  bairro      String @unique
+  bairro      String
   number_home String
   city        String
   state       String
@@ -37,4 +37,12 @@ model Profile {
   avatar     String?
   fk_user_id String  @unique
   user       User    @relation(fields: [fk_user_id], references: [id])
+}
+
+model User_tokens {
+  id         String   @id @default(uuid())
+  token      String   @default(uuid()) @db.Uuid
+  user_id    String?
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @default(now()) @db.Timestamp(6)
 }

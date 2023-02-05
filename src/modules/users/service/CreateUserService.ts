@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { PrismaClient, User } from '@prisma/client';
-import ICacheProvider from '@shared/container/providers/model/ICacheProvider';
+import ICacheProvider from '@shared/container/providers/Cache/model/ICacheProvider';
 import { IEndDto, IUserDtos } from '@shared/dtos';
 import { Err } from '@shared/errors/AppError';
 import { hash } from 'bcryptjs';
@@ -24,7 +24,7 @@ interface Props {
 @injectable()
 export class CreateUserService {
   constructor(
-    @inject('PrismaUser')
+    @inject(process.env.USER!)
     private userRepository: IUsersRepository,
 
     @inject('Cache')

@@ -1,6 +1,7 @@
 /* eslint-disable import-helpers/order-imports */
 import 'reflect-metadata';
 import rateLimiter from '@shared/midle/rateLimit';
+import 'dotenv/config';
 import { errors } from 'celebrate';
 import cors from 'cors';
 import express, { Request, Response, NextFunction } from 'express';

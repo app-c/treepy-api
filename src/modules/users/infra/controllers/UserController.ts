@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CreateUserService } from '@modules/users/service/CreateUserService';
+import { SendForgotPasswordEmailService } from '@modules/users/service/SendForgotPasswordEmailService';
 import { SessionService } from '@modules/users/service/SessionService.service';
-import { UpdateSenha } from '@modules/users/service/UpdatePass';
 import axios from 'axios';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
@@ -91,6 +91,18 @@ export class UserController {
     const sess = await service.execute({
       email,
       password,
+    });
+
+    return res.json(sess);
+  }
+
+  async sendForgotPassword(req: Request, res: Response): Promise<Response> {
+    const service = container.resolve(SendForgotPasswordEmailService);
+
+    const { email } = req.body;
+
+    const sess = await service.execute({
+      email,
     });
 
     return res.json(sess);

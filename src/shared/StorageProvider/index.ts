@@ -5,11 +5,11 @@ import { DiskStorageProvider } from './implementations/DiskStorageProvider';
 import IStorageProvider from './models/IStorageProviders';
 
 const providers = {
-   disk: DiskStorageProvider,
-   s3: DiskStorageProvider,
+  disk: DiskStorageProvider,
+  s3: DiskStorageProvider,
 };
 
 container.registerInstance<IStorageProvider>(
-   'StorageProvider',
-   new providers[upload.driver](),
+  'StorageProvider',
+  new providers[upload.driver](),
 );
