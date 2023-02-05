@@ -22,10 +22,12 @@ interface IResponse {
   token: string;
 }
 
+const USER = process.env.USER!;
+
 @injectable()
 export class SessionService {
   constructor(
-    @inject('PrismaUser')
+    @inject(USER)
     private userRepository: IUsersRepository,
   ) {}
 
