@@ -18,6 +18,7 @@ import { Route } from './routes/index.routes';
 
 import '@shared/container';
 import { Err } from '../../errors/AppError';
+import { env } from 'env';
 
 const app = express();
 const server = createServer(app);
@@ -81,6 +82,6 @@ app.use((err: Error, req: Request, res: Response, _: NextFunction) => {
   });
 });
 
-server.listen(3333, () => console.log('listening on port 3333'));
+server.listen(env.PORT, () => console.log(`server listen on ${env.PORT}`));
 
 export { app };

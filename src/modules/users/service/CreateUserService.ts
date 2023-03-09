@@ -46,7 +46,9 @@ export class CreateUserService {
     const find = await this.userRepository.findUserByEmail(email);
 
     if (find) {
-      throw new Err('Esse membro já está cadastrado');
+      throw new Err(
+        'Esse usuário já está cadastrado. Tente novamente com um email diferente',
+      );
     }
 
     const has = await hash(password, 8);

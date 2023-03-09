@@ -1,7 +1,15 @@
+import { Auth } from '@shared/midle/Auth';
 import axios from 'axios';
 import { Router } from 'express';
 import fs from 'fs';
+import Pag from 'pagseguro-nodejs';
 import parseXml from 'xml2js';
+
+const pagseg = new Pag({
+  email: 'william@app-com.digital',
+  token: '4033C10F0000C47AA4AF7F85B5EC75F5',
+  mode: 'sandbox',
+});
 
 const pay = Router();
 const ws = axios.create({
@@ -14,8 +22,11 @@ pay.post('/session', async (req, res) => {
   );
 
   const rs = resp.data;
-
-  return res.json(rs);
+  const dt = null;
+  const parser = new parseXml.Parser();
+  parser.parseString(rs, (err, result) => {
+    return res.json(result);
+  });
 });
 
 pay.post('/brand', async (req, res) => {
@@ -40,10 +51,10 @@ pay.post('/parc', async (req, res) => {
     ' https://sandbox.pagseguro.uol.com.br/checkout/v2/installments.json',
     {
       params: {
-        maxInstallmentNoInterest: installment,
-        creditCardBrand: brand,
-        amount,
         sessionId,
+        amount,
+        creditCardBrand: brand,
+        maxInstallmentNoInterest: installment,
       },
     },
   );

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CreateUserService } from '@modules/users/service/CreateUserService';
+import { findUser } from '@modules/users/service/findUserService';
 import { SendForgotPasswordEmailService } from '@modules/users/service/SendForgotPasswordEmailService';
 import { SessionService } from '@modules/users/service/SessionService.service';
 import axios from 'axios';
@@ -24,48 +25,6 @@ export class UserController {
       state,
       cep,
     } = req.body;
-
-    const api = axios.create({
-      baseURL: 'https://sandbox.api.pagseguro.com/orders',
-    });
-    api.defaults.headers.common.Authorization =
-      'Bearer BFAE13863026463B83BA618DDCD40ACE';
-    await api
-
-      .post('', {
-        reference_id: 'ex-00001',
-        customer: {
-          name,
-          email: 'email@test.com',
-          tax_id: '12345678909',
-          phones: [
-            {
-              country: '55',
-              area: '11',
-              number: '999999999',
-              type: 'MOBILE',
-            },
-          ],
-        },
-        items: [
-          {
-            name: 'nome do item',
-            quantity: 1,
-            unit_amount: 500,
-          },
-        ],
-        qr_codes: [
-          {
-            amount: {
-              value: 500,
-            },
-            expiration_date: '2023-01-29T20:15:59-03:00',
-          },
-        ],
-        notification_urls: ['https://meusite.com/notificacoes'],
-      })
-      .then(h => console.log(h.status))
-      .catch(h => console.log(h.status, h.statusText));
 
     const user = await service.execute({
       name,
@@ -103,6 +62,18 @@ export class UserController {
 
     const sess = await service.execute({
       email,
+    });
+
+    return res.json(sess);
+  }
+
+  async findUser(req: Request, res: Response): Promise<Response> {
+    const service = container.resolve(findUser);
+
+    const { id } = req.user;
+
+    const sess = await service.execute({
+      id,
     });
 
     return res.json(sess);
