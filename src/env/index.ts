@@ -15,12 +15,12 @@ const envScheme = z.object({
   AWS_BUCKET_REGION: z.string(),
   AWS_URL: z.string(),
   REDIS_HOST: z.string(),
-  REDIS_PORT: z.number().default(6379),
+  REDIS_PORT: z.string(),
   REDIS_PASS: z.string(),
   USER: z.string(),
   USER_TOKEN: z.string(),
-  STORAGE: z.string(),
   PORT: z.string(),
+  PAG_TOKEN: z.string(),
 });
 
 export const env = envScheme.parse(process.env);
