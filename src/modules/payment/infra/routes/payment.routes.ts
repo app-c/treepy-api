@@ -1,17 +1,14 @@
-import { Auth } from '@shared/midle/Auth';
 import axios from 'axios';
-import { hash } from 'bcryptjs';
-import { env } from 'env';
 import { Router } from 'express';
-import fs from 'fs';
-import Pag from 'pagseguro-nodejs';
 import parseXml from 'xml2js';
 
-const pagseg = new Pag({
-  email: 'william@app-com.digital',
-  token: '4033C10F0000C47AA4AF7F85B5EC75F5',
-  mode: 'sandbox',
-});
+import { env } from '../../../../env';
+
+// const pagseg = new Pag({
+//   email: 'william@app-com.digital',
+//   token: '4033C10F0000C47AA4AF7F85B5EC75F5',
+//   mode: 'sandbox',
+// });
 
 const pay = Router();
 const pag = axios.create({
