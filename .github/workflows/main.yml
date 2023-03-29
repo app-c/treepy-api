@@ -42,7 +42,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/api
-            yarn bd
             
       - name: Run prisma
         uses: appleboy/ssh-action@master
@@ -51,7 +50,4 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
-          script: yarn bd
-          
-
-        
+          script: pm2 restart treepy
