@@ -42,4 +42,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/test
-            ls
+            pm2 restart treepy
