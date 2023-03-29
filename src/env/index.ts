@@ -18,7 +18,6 @@ const envScheme = z.object({
   REDIS_PORT: z.string(),
   REDIS_PASS: z.string(),
   USER: z.string(),
-  USER_TOKEN: z.string(),
   PORT: z.string(),
   PAG_TOKEN: z.string(),
 });

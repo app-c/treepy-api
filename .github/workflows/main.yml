@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
-          source: ".,!node_modules"
+          # source: ".,!node_modules"
           target: "~/api"
       
       - name: Iniciando script de produçao
@@ -43,3 +43,12 @@ jobs:
           script: |
             cd ~/api
             yarn
+
+      - name: Reload aplication
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          script: pm2 reload treepy
