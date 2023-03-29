@@ -43,4 +43,4 @@ jobs:
           script: |
             cd ~/app/api
             yarn prisma db push
-            pm2 restart nails 
+            pm2 restart treepy
