@@ -42,5 +42,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/test
-            yarn prisma db push
             pm2 restart nails 
