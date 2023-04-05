@@ -156,13 +156,192 @@ pay.post('/card', async (req, res) => {
     .then(h => {
       const rs = h.data;
 
-      console.log(rs);
+      return res.json(rs);
+    })
+    .catch(h => {
+      console.log(h.response.statusCode);
+      return res.json(h);
+    });
+});
 
+pay.post('/boleto', async (req, res) => {
+  pag.defaults.headers.common.Authorization = `Bearer ${env.PAG_TOKEN}`;
+
+  const {
+    name,
+    email,
+    area,
+    phone_number,
+    amount,
+    street,
+    home_number,
+    complement,
+    locality,
+    city,
+    region_code,
+    postal_code,
+    holder_name,
+    due_date,
+    region,
+  } = req.body;
+
+  await pag
+    .post('/orders', {
+      reference_id: 'ex-00001',
+      customer: {
+        name,
+        email,
+        tax_id: '12345678909',
+
+        phones: [
+          {
+            country: '55',
+            area,
+            number: phone_number,
+            type: 'MOBILE',
+          },
+        ],
+      },
+
+      items: [
+        {
+          reference_id: 'treepycache',
+          name: 'TreepyCache',
+          quantity: 1,
+          unit_amount: amount,
+        },
+      ],
+
+      shipping: {
+        address: {
+          street,
+          number: home_number,
+          complement,
+          locality,
+          city,
+          region_code,
+          country: 'BRA',
+          postal_code,
+        },
+      },
+
+      notification_urls: ['https://meusite.com/notificacoes'],
+      charges: [
+        {
+          reference_id: 'treepycache',
+          description: 'Compra de TreepyCache',
+          amount: {
+            value: amount,
+            currency: 'BRL',
+          },
+
+          payment_method: {
+            type: 'BOLETO',
+            boleto: {
+              due_date,
+              instruction_lines: {
+                line_1: 'Pagamento processado para DESC Fatura',
+                line_2: 'Via Treepy',
+              },
+              holder: {
+                name: holder_name,
+                tax_id: '22222222222',
+                email,
+                address: {
+                  country: 'Brasil',
+                  region,
+                  region_code,
+                  city,
+                  postal_code,
+                  street,
+                  number: home_number,
+                  locality,
+                },
+              },
+            },
+          },
+        },
+      ],
+    })
+    .then(h => {
+      const rs = h.data;
       return res.json(rs);
     })
     .catch(h => {
       console.log(h);
-      // return res.json(h.response);
+    });
+});
+
+pay.post('/pix', async (req, res) => {
+  pag.defaults.headers.common.Authorization = `Bearer ${env.PAG_TOKEN}`;
+
+  const {
+    name,
+    email,
+    area,
+    phone_number,
+    amount,
+    street,
+    home_number,
+    complement,
+    locality,
+    city,
+    region_code,
+    postal_code,
+    expiration_date,
+  } = req.body;
+
+  await pag
+    .post('/orders', {
+      reference_id: 'ex-00001',
+      customer: {
+        name,
+        email,
+        tax_id: '12345678909',
+        phones: [
+          {
+            country: '55',
+            area,
+            number: phone_number,
+            type: 'MOBILE',
+          },
+        ],
+      },
+      items: [
+        {
+          name: 'TreepyCache',
+          quantity: 1,
+          unit_amount: amount,
+        },
+      ],
+      qr_codes: [
+        {
+          amount: {
+            value: amount,
+          },
+          expiration_date,
+        },
+      ],
+      shipping: {
+        address: {
+          street,
+          number: home_number,
+          complement,
+          locality,
+          city,
+          region_code,
+          country: 'BRA',
+          postal_code,
+        },
+      },
+      notification_urls: ['https://meusite.com/notificacoes'],
+    })
+    .then(h => {
+      const rs = h.data;
+      return res.json(rs);
+    })
+    .catch(h => {
+      console.log(h);
     });
 });
 
