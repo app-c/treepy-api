@@ -1,0 +1,15 @@
+version: '3'
+
+services: 
+  projetos:
+    image: bitnami/postgresql
+    ports: 
+      - 5432:5432
+    environment:
+      # - POSTGRESQL_USERNAME=api
+      - POSTGRESQL_PASSWORD=camaleao
+      # - POSTGRESQL_DATABASE=TREEPY
+  redis:
+    image: bitnami/redis:latest
+    ports: 
+      - 6379:6379

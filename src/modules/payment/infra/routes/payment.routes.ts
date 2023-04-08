@@ -69,8 +69,7 @@ pay.post('/card', async (req, res) => {
     email,
     area,
     phone_number,
-    name_item,
-    reference_item_id,
+    tax_id,
     amount,
     street,
     home_number,
@@ -79,7 +78,6 @@ pay.post('/card', async (req, res) => {
     city,
     region_code,
     postal_code,
-    description,
     installments,
     number_card,
     exp_month,
@@ -88,15 +86,13 @@ pay.post('/card', async (req, res) => {
     holder_name,
   } = req.body;
 
-  const id = '12345';
-
   await pag
     .post('/orders', {
       reference_id: 'ex-00001',
       customer: {
         name,
         email,
-        tax_id: '12345678909',
+        tax_id,
         phones: [
           {
             country: '55',

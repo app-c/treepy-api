@@ -11,6 +11,9 @@ import './providers';
 import '@modules/users/providers';
 import IUserTokenRepository from '@modules/users/repositories/IUserTokenRepository';
 import UserTokenRepository from '@modules/users/repositories/UserTokenRepositorie';
+import { env } from 'env';
+import { IEndRepository } from '@modules/End/repositories/IRepository/IEndRepository';
+import { EndPrismaRepository } from '@modules/End/repositories/models/EndPrismaRepository';
 
 import RedisCacheProvider from './providers/Cache/implementations/RedisCachProvider';
 // const providers = {
@@ -29,4 +32,6 @@ container.registerSingleton<IUsersRepository>(
 
 container.registerSingleton<IUserTokenRepository>('token', UserTokenRepository);
 
-container.registerSingleton<IStorageProvider>(process.env.STOREGE!, S3Storage);
+container.registerSingleton<IStorageProvider>(env.USER, S3Storage);
+
+container.registerSingleton<IEndRepository>(env.END, EndPrismaRepository);

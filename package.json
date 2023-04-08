@@ -11,6 +11,7 @@
     "type": "ts-node-dev  -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "test": "jest",
     "bd": "prisma migrate dev",
+    "pp": "yarn plop --plopfile ./generators/plopfile.cjs",
     "ts": "yarn tsup src"
   },
   "dependencies": {
@@ -18,7 +19,7 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/date-fns": "^2.6.0",
     "@types/ioredis": "^4.26.1",
-    "aws-sdk": "^2.1004.0",
+    "aws-sdk": "2.1353.0",
     "axios": "^1.2.2",
     "bcryptjs": "^2.4.3",
     "celebrate": "^14.0.0",
@@ -86,7 +87,7 @@
     "eslint-plugin-import-helpers": "^1.1.0",
     "eslint-plugin-prettier": "^3.4.0",
     "license": "MIT",
-    "plop": "^3.1.1",
+    "plop": "3.1.2",
     "prettier": "^2.2.1",
     "private": "MIT",
     "tsx": "^3.12.2"

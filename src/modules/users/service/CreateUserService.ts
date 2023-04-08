@@ -4,27 +4,32 @@ import ICacheProvider from '@shared/container/providers/Cache/model/ICacheProvid
 import { IEndDto, IUserDtos } from '@shared/dtos';
 import { Err } from '@shared/errors/AppError';
 import { hash } from 'bcryptjs';
+import { env } from 'env';
 import { inject, injectable } from 'tsyringe';
 
 import { IUsersRepository } from '../repositories/IUsersRespository';
 
 interface Props {
-  name: string;
-  midle_name: string;
-  password: string;
+  full_name: string;
   email: string;
+  password: string;
+  cpf: string;
+  phone_are: string;
+  phone_number: string;
+
   street: string;
-  bairro: string;
-  number_home: string;
+  locality: string;
+  home_number: string;
   city: string;
   state: string;
-  cep: string;
+  region_code: string;
+  postal_code: string;
 }
 
 @injectable()
 export class CreateUserService {
   constructor(
-    @inject(process.env.USER!)
+    @inject(env.USER)
     private userRepository: IUsersRepository,
 
     @inject('Cache')
@@ -32,16 +37,19 @@ export class CreateUserService {
   ) {}
 
   async execute({
-    name,
-    midle_name,
+    full_name,
     password,
     email,
     street,
-    bairro,
-    number_home,
+    home_number,
+    cpf,
+    locality,
+    phone_are,
+    phone_number,
+    postal_code,
+    region_code,
     city,
     state,
-    cep,
   }: Props): Promise<User> {
     const find = await this.userRepository.findUserByEmail(email);
 
@@ -53,25 +61,27 @@ export class CreateUserService {
 
     const has = await hash(password, 8);
     const dataUser = {
-      name,
-      midle_name,
-      password: has,
+      full_name,
       email,
+      password: has,
+      cpf,
+      phone_are,
+      phone_number,
     };
 
     const dataEnd = {
       street,
-      bairro,
+      locality,
+      home_number,
       city,
       state,
-      cep,
-      number_home,
+      region_code,
+      postal_code,
     };
 
     const createUser = await this.userRepository.create(dataUser, dataEnd);
 
     await this.cache.invalidate('users');
-    await this.cache.invalidatePrefix(`individualPonts`);
 
     return createUser;
   }

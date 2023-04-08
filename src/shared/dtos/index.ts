@@ -16,11 +16,12 @@ export interface IProfileDto {
 
 export interface IEndDto {
   street: string;
-  bairro: string;
-  number_home: string;
+  locality: string;
+  home_number: string;
   city: string;
   state: string;
-  cep: string;
+  region_code: string;
+  postal_code: string;
 }
 
 export interface PersonCardProps {

@@ -17,9 +17,10 @@ const envScheme = z.object({
   REDIS_HOST: z.string(),
   REDIS_PORT: z.string(),
   REDIS_PASS: z.string(),
-  USER: z.string(),
   PORT: z.string(),
   PAG_TOKEN: z.string(),
+  USER: z.string(),
+  END: z.string(),
 });
 
 export const env = envScheme.parse(process.env);
