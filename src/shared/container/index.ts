@@ -32,6 +32,6 @@ container.registerSingleton<IUsersRepository>(
 
 container.registerSingleton<IUserTokenRepository>('token', UserTokenRepository);
 
-container.registerSingleton<IStorageProvider>(env.USER, S3Storage);
+container.registerSingleton<IStorageProvider>('User', S3Storage);
 
-container.registerSingleton<IEndRepository>(env.END, EndPrismaRepository);
+container.registerSingleton<IEndRepository>('End', EndPrismaRepository);

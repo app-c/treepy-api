@@ -29,7 +29,7 @@ interface Props {
 @injectable()
 export class CreateUserService {
   constructor(
-    @inject(env.USER)
+    @inject('User')
     private userRepository: IUsersRepository,
 
     @inject('Cache')
@@ -50,39 +50,42 @@ export class CreateUserService {
     region_code,
     city,
     state,
-  }: Props): Promise<User> {
+  }: Props): Promise<any> {
     const find = await this.userRepository.findUserByEmail(email);
 
-    if (find) {
-      throw new Err(
-        'Esse usuário já está cadastrado. Tente novamente com um email diferente',
-      );
-    }
+    // if (find) {
+    //   throw new Err(
+    //     'Esse usuário já está cadastrado. Tente novamente com um email diferente',
+    //   );
+    // }
 
     const has = await hash(password, 8);
-    const dataUser = {
-      full_name,
-      email,
-      password: has,
-      cpf,
-      phone_are,
-      phone_number,
-    };
 
-    const dataEnd = {
-      street,
-      locality,
-      home_number,
-      city,
-      state,
-      region_code,
-      postal_code,
-    };
+    // const dataUser = {
+    //   full_name,
+    //   email,
+    //   password: has,
+    //   cpf,
+    //   phone_are,
+    //   phone_number,
+    // };
 
-    const createUser = await this.userRepository.create(dataUser, dataEnd);
+    // const dataEnd = {
+    //   street,
+    //   locality,
+    //   home_number,
+    //   city,
+    //   state,
+    //   region_code,
+    //   postal_code,
+    // };
 
-    await this.cache.invalidate('users');
+    // const createUser = await this.userRepository.create(dataUser, dataEnd);
 
-    return createUser;
+    // await this.cache.invalidate('users');
+
+    console.log(email);
+
+    return 'createUser';
   }
 }
