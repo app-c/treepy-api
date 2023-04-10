@@ -1,3 +1,4 @@
+import sdk from 'api/@devpagseguro/v2.0#3izr7l2skylmkrvs';
 import axios from 'axios';
 import { Router } from 'express';
 import parseXml from 'xml2js';
@@ -15,21 +16,22 @@ const pag = axios.create({
   baseURL: 'https://sandbox.api.pagseguro.com/',
 });
 
-pay.post('/session', async (req, res) => {
-  const resp = await pag.post(
-    '/sessions?appId=app5679017007&appKey=4033C10F0000C47AA4AF7F85B5EC75F5',
+pay.get('/session', async (req, res) => {
+  const resp = await axios.post(
+    ` https://ws.sandbox.pagseguro.uol.com.br/sessions?appId=${env.APP_ID}&appKey=${env.APP_KEY}`,
   );
-
   const rs = resp.data;
-  const dt = null;
   const parser = new parseXml.Parser();
   parser.parseString(rs, (err, result) => {
-    return res.json(result);
+    const token_id = {
+      id: result.session.id[0],
+    };
+    return res.json(token_id);
   });
 });
 
-pay.post('/brand', async (req, res) => {
-  const { tk, creditCard } = req.body;
+pay.get('/brand', async (req, res) => {
+  const { tk, creditCard } = req.params;
   const resp = await axios.get(
     'https://df.uol.com.br/df-fe/mvc/creditcard/v1/getBin',
     {
@@ -43,22 +45,30 @@ pay.post('/brand', async (req, res) => {
   return res.json(resp.data);
 });
 
-pay.post('/parc', async (req, res) => {
-  const { installment, brand, amount, sessionId } = req.body;
+pay.get('/parc/:value', async (req, res) => {
+  const { value } = req.params;
+  pag.defaults.headers.common.Authorization = `Bearer ${env.PAG_TOKEN}`;
 
-  const resp = await axios.get(
-    ' https://sandbox.pagseguro.uol.com.br/checkout/v2/installments.json',
-    {
-      params: {
-        sessionId,
-        amount,
-        creditCardBrand: brand,
-        maxInstallmentNoInterest: installment,
-      },
-    },
-  );
+  await pag
+    .get(`/charges/fees/calculate?payment_methods=credit_card&value=${value}`)
+    .then(h => {
+      const rs = h.data;
+      return res.json(rs);
+    })
+    .catch(h => res.json(h.response.data));
+  // const { installment, brand, amount, sessionId } = req.body;
 
-  return res.json(resp.data);
+  // const resp = await axios.get(
+  //   ' https://sandbox.pagseguro.uol.com.br/checkout/v2/installments.json',
+  //   {
+  //     params: {
+  //       sessionId,
+  //       amount,
+  //       creditCardBrand: brand,
+  //       maxInstallmentNoInterest: installment,
+  //     },
+  //   },
+  // );
 });
 
 pay.post('/card', async (req, res) => {

@@ -13,10 +13,10 @@ generator client {
 model User {
   id           String    @id @default(uuid())
   full_name    String
-  email        String    @unique()
+  email        String
   password     String
   cpf          String    @unique()
-  phone_are    String
+  phone_area   String
   phone_number String
   end          End?
   profile      Profile?

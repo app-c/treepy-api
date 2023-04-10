@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { PrismaClient, User, Prisma } from '@prisma/client';
 import { IEndDto, IUserDtos } from '@shared/dtos';
+import { prisma } from 'utils/prisma';
 
 import { IUsersRepository } from './IUsersRespository';
 
@@ -8,7 +9,7 @@ export class UsersRespository implements IUsersRepository {
   private prisma = new PrismaClient();
 
   public async findUserByEmail(email: string): Promise<User | null> {
-    const us = await this.prisma.user.findFirst({
+    const us = await prisma.user.findFirst({
       where: { email },
     });
 
@@ -33,12 +34,7 @@ export class UsersRespository implements IUsersRepository {
   ): Promise<User> {
     const user = await this.prisma.user.create({
       data: {
-        full_name: data.full_name,
-        email: data.email,
-        password: data.password,
-        cpf: data.cpf,
-        phone_are: data.phone_are,
-        phone_number: data.phone_number,
+        ...data,
         end: {
           create: {
             street: end.street,
@@ -60,5 +56,11 @@ export class UsersRespository implements IUsersRepository {
     });
 
     return user;
+  }
+
+  public async findCpf(cpf: string): Promise<User | null> {
+    const find = await prisma.user.findUnique({ where: { cpf } });
+
+    return find;
   }
 }

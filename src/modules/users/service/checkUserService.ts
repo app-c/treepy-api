@@ -9,23 +9,12 @@ import { inject, injectable } from 'tsyringe';
 import { IUsersRepository } from '../repositories/IUsersRespository';
 
 interface Props {
-  full_name: string;
   email: string;
-  password: string;
   cpf: string;
-  phone_area: string;
-  phone_number: string;
-  street: string;
-  locality: string;
-  home_number: string;
-  city: string;
-  state: string;
-  region_code: string;
-  postal_code: string;
 }
 
 @injectable()
-export class CreateUserService {
+export class checkMailService {
   constructor(
     @inject(process.env.USER!)
     private userRepository: IUsersRepository,
@@ -34,21 +23,7 @@ export class CreateUserService {
     private cache: ICacheProvider,
   ) {}
 
-  async execute({
-    full_name,
-    email,
-    password,
-    cpf,
-    phone_area,
-    phone_number,
-    street,
-    locality,
-    home_number,
-    city,
-    state,
-    region_code,
-    postal_code,
-  }: Props): Promise<User> {
+  async execute({ email, cpf }: Props): Promise<void> {
     const find = await this.userRepository.findUserByEmail(email);
     const findCpf = await this.userRepository.findCpf(cpf);
 
@@ -64,31 +39,7 @@ export class CreateUserService {
       );
     }
 
-    const has = await hash(password, 8);
-    const dataUser = {
-      full_name,
-      email,
-      password: has,
-      cpf,
-      phone_area,
-      phone_number,
-    };
-
-    const dataEnd = {
-      street,
-      locality,
-      home_number,
-      region_code,
-      postal_code,
-      city,
-      state,
-    };
-
-    const createUser = await this.userRepository.create(dataUser, dataEnd);
-
     await this.cache.invalidate('users');
     await this.cache.invalidatePrefix(`individualPonts`);
-
-    return createUser;
   }
 }

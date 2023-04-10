@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { checkMailService } from '@modules/users/service/checkUserService';
 import { CreateUserService } from '@modules/users/service/CreateUserService';
 import { findUser } from '@modules/users/service/findUserService';
 import { SendForgotPasswordEmailService } from '@modules/users/service/SendForgotPasswordEmailService';
@@ -14,29 +15,35 @@ export class UserController {
     const service = container.resolve(CreateUserService);
 
     const {
-      name,
+      full_name,
       email,
       password,
-      midle_name,
+      cpf,
+      phone_area,
+      phone_number,
       street,
-      bairro,
-      number_home,
+      locality,
+      home_number,
       city,
       state,
-      cep,
+      region_code,
+      postal_code,
     } = req.body;
 
     const user = await service.execute({
-      name,
-      midle_name,
-      password,
+      full_name,
       email,
+      password,
+      cpf,
+      phone_area,
+      phone_number,
       street,
-      bairro,
-      number_home,
+      locality,
+      home_number,
       city,
       state,
-      cep,
+      region_code,
+      postal_code,
     });
 
     return res.json(user);
@@ -74,6 +81,19 @@ export class UserController {
 
     const sess = await service.execute({
       id,
+    });
+
+    return res.json(sess);
+  }
+
+  async checkMail(req: Request, res: Response): Promise<Response> {
+    const service = container.resolve(checkMailService);
+
+    const { mail, cpf } = req.params;
+
+    const sess = await service.execute({
+      email: String(mail),
+      cpf: String(cpf),
     });
 
     return res.json(sess);

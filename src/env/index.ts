@@ -21,6 +21,8 @@ const envScheme = z.object({
   PAG_TOKEN: z.string(),
   USER: z.string(),
   END: z.string(),
+  APP_KEY: z.string(),
+  APP_ID: z.string(),
 });
 
 export const env = envScheme.parse(process.env);
