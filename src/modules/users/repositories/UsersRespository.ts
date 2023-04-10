@@ -15,7 +15,7 @@ export class UsersRespository implements IUsersRepository {
   }
 
   public async findUserById(id: string): Promise<User | null> {
-    const us = await this.prisma.user.findUnique({
+    const us = await prisma.user.findUnique({
       where: { id },
       include: {
         end: true,
@@ -30,7 +30,7 @@ export class UsersRespository implements IUsersRepository {
     data: Prisma.UserCreateInput,
     end: IEndDto,
   ): Promise<User> {
-    const user = await this.prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         ...data,
         end: {
