@@ -84,9 +84,8 @@ export class CreateUserService {
       state,
     };
 
+    await this.cache.invalidate('users');
     const createUser = await this.userRepository.create(dataUser, dataEnd);
-
-    // await this.cache.invalidate('users');
 
     return createUser;
   }
