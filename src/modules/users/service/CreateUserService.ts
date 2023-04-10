@@ -86,8 +86,7 @@ export class CreateUserService {
 
     const createUser = await this.userRepository.create(dataUser, dataEnd);
 
-    await this.cache.invalidate('users');
-    await this.cache.invalidatePrefix(`individualPonts`);
+    // await this.cache.invalidate('users');
 
     return createUser;
   }

@@ -17,7 +17,7 @@ class UsersRespository {
     return us;
   }
   async findUserById(id) {
-    const us = await this.prisma.user.findUnique({
+    const us = await _prisma.prisma.user.findUnique({
       where: {
         id
       },
@@ -29,7 +29,7 @@ class UsersRespository {
     return us;
   }
   async create(data, end) {
-    const user = await this.prisma.user.create({
+    const user = await _prisma.prisma.user.create({
       data: {
         ...data,
         end: {
