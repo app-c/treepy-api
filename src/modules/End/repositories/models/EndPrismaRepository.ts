@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { End, Prisma } from '@prisma/client';
-import { prisma } from 'utils/prisma';
 
+import { prisma } from '../../../../utils/prisma';
 import { IEndRepository } from '../IRepository/IEndRepository';
 
 export class EndPrismaRepository implements IEndRepository {

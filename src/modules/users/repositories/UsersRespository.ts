@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { PrismaClient, User, Prisma } from '@prisma/client';
 import { IEndDto, IUserDtos } from '@shared/dtos';
-import { prisma } from 'utils/prisma';
 
+import { prisma } from '../../../utils/prisma';
 import { IUsersRepository } from './IUsersRespository';
 
 export class UsersRespository implements IUsersRepository {
-  private prisma = new PrismaClient();
-
   public async findUserByEmail(email: string): Promise<User | null> {
     const us = await prisma.user.findFirst({
       where: { email },

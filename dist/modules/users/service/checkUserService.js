@@ -3,37 +3,25 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CreateUserService = void 0;
+exports.checkMailService = void 0;
 var _ICacheProvider = _interopRequireDefault(require("../../../shared/container/providers/Cache/model/ICacheProvider"));
 var _AppError = require("../../../shared/errors/AppError");
-var _bcryptjs = require("bcryptjs");
 var _tsyringe = require("tsyringe");
 var _IUsersRespository = require("../repositories/IUsersRespository");
 var _dec, _dec2, _dec3, _dec4, _dec5, _class;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-let CreateUserService = (_dec = (0, _tsyringe.injectable)(), _dec2 = function (target, key) {
+let checkMailService = (_dec = (0, _tsyringe.injectable)(), _dec2 = function (target, key) {
   return (0, _tsyringe.inject)(process.env.USER)(target, undefined, 0);
 }, _dec3 = function (target, key) {
   return (0, _tsyringe.inject)('Cache')(target, undefined, 1);
-}, _dec4 = Reflect.metadata("design:type", Function), _dec5 = Reflect.metadata("design:paramtypes", [typeof _IUsersRespository.IUsersRepository === "undefined" ? Object : _IUsersRespository.IUsersRepository, typeof _ICacheProvider.default === "undefined" ? Object : _ICacheProvider.default]), _dec(_class = _dec2(_class = _dec3(_class = _dec4(_class = _dec5(_class = class CreateUserService {
+}, _dec4 = Reflect.metadata("design:type", Function), _dec5 = Reflect.metadata("design:paramtypes", [typeof _IUsersRespository.IUsersRepository === "undefined" ? Object : _IUsersRespository.IUsersRepository, typeof _ICacheProvider.default === "undefined" ? Object : _ICacheProvider.default]), _dec(_class = _dec2(_class = _dec3(_class = _dec4(_class = _dec5(_class = class checkMailService {
   constructor(userRepository, cache) {
     this.userRepository = userRepository;
     this.cache = cache;
   }
   async execute({
-    full_name,
     email,
-    password,
-    cpf,
-    phone_area,
-    phone_number,
-    street,
-    locality,
-    home_number,
-    city,
-    state,
-    region_code,
-    postal_code
+    cpf
   }) {
     const find = await this.userRepository.findUserByEmail(email);
     const findCpf = await this.userRepository.findCpf(cpf);
@@ -43,28 +31,8 @@ let CreateUserService = (_dec = (0, _tsyringe.injectable)(), _dec2 = function (t
     if (findCpf) {
       throw new _AppError.Err('CPF já está cadastrado. Tente novamente com um CPF diferente');
     }
-    const has = await (0, _bcryptjs.hash)(password, 8);
-    const dataUser = {
-      full_name,
-      email,
-      password: has,
-      cpf,
-      phone_area,
-      phone_number
-    };
-    const dataEnd = {
-      street,
-      locality,
-      home_number,
-      region_code,
-      postal_code,
-      city,
-      state
-    };
-    const createUser = await this.userRepository.create(dataUser, dataEnd);
     await this.cache.invalidate('users');
     await this.cache.invalidatePrefix(`individualPonts`);
-    return createUser;
   }
 }) || _class) || _class) || _class) || _class) || _class);
-exports.CreateUserService = CreateUserService;
+exports.checkMailService = checkMailService;
