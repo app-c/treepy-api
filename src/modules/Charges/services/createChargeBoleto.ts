@@ -5,10 +5,10 @@ import ICacheProvider from '@shared/container/providers/Cache/model/ICacheProvid
 import { Err } from '@shared/errors/AppError';
 import axios from 'axios';
 import { hash } from 'bcryptjs';
-import { env } from 'env';
 import { inject, injectable } from 'tsyringe';
 import { v4 as uuidv4 } from 'uuid';
 
+import { env } from '../../../env';
 import { IChargeDto, ISumary } from '../dto';
 import { charges } from '../http/routes/charges';
 import { IChargesRepository } from '../repositories/IRepository/IChargesRepository';
