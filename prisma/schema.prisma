@@ -20,7 +20,7 @@ model User {
   phone_number String
   end          End?
   profile      Profile?
-  Payment      Payment[]
+  Charges      Charges[]
 }
 
 model End {
@@ -51,10 +51,29 @@ model User_tokens {
   updated_at DateTime @default(now()) @db.Timestamp(6)
 }
 
-model Payment {
-  id         String @id @default(uuid())
-  status     String
-  fk_user_id String
+model Charges {
+  id             String   @id @default(uuid())
+  reference_id   String
+  status         String
+  charge_id      String
+  amount         Int
+  payment_method String
+  fk_user_id     String
+  created_at     DateTime @default(now())
+  sumary         Sumary?
+  user           User     @relation(fields: [fk_user_id], references: [id])
+}
 
-  user User @relation(fields: [fk_user_id], references: [id])
+model Sumary {
+  id           String  @id @default(uuid())
+  total        Int
+  paid         Int
+  fk_charge_id String  @unique
+  charge       Charges @relation(fields: [fk_charge_id], references: [id])
+}
+
+model Orders_Message {
+  id         String   @id @default(uuid())
+  message    Json
+  created_at DateTime @default(now())
 }
