@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Orders_Message, Prisma } from '@prisma/client';
-import { prisma } from 'utils/prisma';
 
+import { prisma } from '../../../../utils/prisma';
 import { IOrders_MessageRepository } from '../IRepository/IOrders_MessageRepository';
 
 export class Orders_MessagePrismaRepository

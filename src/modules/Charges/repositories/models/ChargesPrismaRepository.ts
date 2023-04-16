@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { IChargeDto, ISumary } from '@modules/Charges/dto';
 import { Charges, Prisma } from '@prisma/client';
-import { prisma } from 'utils/prisma';
 
+import { prisma } from '../../../../utils/prisma';
 import { IChargesRepository } from '../IRepository/IChargesRepository';
 
 export class ChargesPrismaRepository implements IChargesRepository {
