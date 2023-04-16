@@ -90,3 +90,9 @@ export class CreateUserService {
     return createUser;
   }
 }
+
+
+ReplyError: READONLY You can't write against a read only replica.                              │
+  at parseError (/home/treepy/app/treepy-api/node_modules/redis-parser/lib/parser.js:179:12  │
+  at parseType (/home/treepy/app/treepy-api/node_modules/redis-parser/lib/parser.js:302:14)  │
+command: { name: 'del', args: [ 'users' ] } 
