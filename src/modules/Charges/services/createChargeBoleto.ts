@@ -172,7 +172,7 @@ export class createChargeBoleto {
         }
       })
       .catch(h => {
-        console.log(h.response.data);
+        console.log(h.response.data.error_messages);
       });
 
     const create = await this.repoCharges.create(data, sumary);
