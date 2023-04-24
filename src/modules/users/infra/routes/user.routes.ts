@@ -12,6 +12,7 @@ const img = multer(upload);
 
 user.post('/create-user', control.create);
 user.post('/session', control.session);
+user.get('/check-mail/:mail/:cpf', control.checkMail);
 user.get('/find-user/', Auth, control.findUser);
 
 user.post('/send-forgot-password', control.sendForgotPassword);

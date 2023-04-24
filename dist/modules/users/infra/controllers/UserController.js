@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.UserController = void 0;
+var _checkUserService = require("../../service/checkUserService");
 var _CreateUserService = require("../../service/CreateUserService");
 var _findUserService = require("../../service/findUserService");
 var _SendForgotPasswordEmailService = require("../../service/SendForgotPasswordEmailService");
@@ -15,28 +16,34 @@ class UserController {
   async create(req, res) {
     const service = _tsyringe.container.resolve(_CreateUserService.CreateUserService);
     const {
-      name,
+      full_name,
       email,
       password,
-      midle_name,
+      cpf,
+      phone_area,
+      phone_number,
       street,
-      bairro,
-      number_home,
+      locality,
+      home_number,
       city,
       state,
-      cep
+      region_code,
+      postal_code
     } = req.body;
     const user = await service.execute({
-      name,
-      midle_name,
-      password,
+      full_name,
       email,
+      password,
+      cpf,
+      phone_area,
+      phone_number,
       street,
-      bairro,
-      number_home,
+      locality,
+      home_number,
       city,
       state,
-      cep
+      region_code,
+      postal_code
     });
     return res.json(user);
   }
@@ -69,6 +76,18 @@ class UserController {
     } = req.user;
     const sess = await service.execute({
       id
+    });
+    return res.json(sess);
+  }
+  async checkMail(req, res) {
+    const service = _tsyringe.container.resolve(_checkUserService.checkMailService);
+    const {
+      mail,
+      cpf
+    } = req.params;
+    const sess = await service.execute({
+      email: String(mail),
+      cpf: String(cpf)
     });
     return res.json(sess);
   }

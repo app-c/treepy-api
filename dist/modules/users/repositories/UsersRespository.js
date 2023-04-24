@@ -4,15 +4,12 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.UsersRespository = void 0;
-var _client = require("@prisma/client");
+var _prisma = require("../../../utils/prisma");
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 class UsersRespository {
-  constructor() {
-    this.prisma = new _client.PrismaClient();
-  }
   async findUserByEmail(email) {
-    const us = await this.prisma.user.findFirst({
+    const us = await _prisma.prisma.user.findFirst({
       where: {
         email
       }
@@ -20,7 +17,7 @@ class UsersRespository {
     return us;
   }
   async findUserById(id) {
-    const us = await this.prisma.user.findUnique({
+    const us = await _prisma.prisma.user.findUnique({
       where: {
         id
       },
@@ -32,20 +29,18 @@ class UsersRespository {
     return us;
   }
   async create(data, end) {
-    const user = await this.prisma.user.create({
+    const user = await _prisma.prisma.user.create({
       data: {
-        name: data.name,
-        midle_name: data.midle_name,
-        email: data.email,
-        password: data.password,
+        ...data,
         end: {
           create: {
+            street: end.street,
+            locality: end.locality,
+            number_home: end.home_number,
             city: end.city,
-            bairro: end.bairro,
-            cep: end.cep,
-            number_home: end.number_home,
-            state: end.state,
-            street: end.street
+            state: end.city,
+            region_code: end.region_code,
+            postal_code: end.postal_code
           }
         },
         profile: {
@@ -56,6 +51,14 @@ class UsersRespository {
       }
     });
     return user;
+  }
+  async findCpf(cpf) {
+    const find = await _prisma.prisma.user.findUnique({
+      where: {
+        cpf
+      }
+    });
+    return find;
   }
 }
 exports.UsersRespository = UsersRespository;

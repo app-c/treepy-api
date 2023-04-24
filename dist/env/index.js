@@ -21,10 +21,12 @@ const envScheme = _zod.z.object({
   REDIS_HOST: _zod.z.string(),
   REDIS_PORT: _zod.z.string(),
   REDIS_PASS: _zod.z.string(),
-  USER: _zod.z.string(),
-  USER_TOKEN: _zod.z.string(),
   PORT: _zod.z.string(),
-  PAG_TOKEN: _zod.z.string()
+  PAG_TOKEN: _zod.z.string(),
+  USER: _zod.z.string(),
+  END: _zod.z.string(),
+  APP_KEY: _zod.z.string(),
+  APP_ID: _zod.z.string()
 });
 const env = envScheme.parse(process.env);
 exports.env = env;

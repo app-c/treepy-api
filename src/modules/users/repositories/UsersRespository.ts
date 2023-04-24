@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { PrismaClient, User } from '@prisma/client';
+import { PrismaClient, User, Prisma } from '@prisma/client';
 import { IEndDto, IUserDtos } from '@shared/dtos';
 
+import { prisma } from '../../../utils/prisma';
 import { IUsersRepository } from './IUsersRespository';
 
 export class UsersRespository implements IUsersRepository {
-  private prisma = new PrismaClient();
-
   public async findUserByEmail(email: string): Promise<User | null> {
-    const us = await this.prisma.user.findFirst({
+    const us = await prisma.user.findFirst({
       where: { email },
     });
 
@@ -16,7 +15,7 @@ export class UsersRespository implements IUsersRepository {
   }
 
   public async findUserById(id: string): Promise<User | null> {
-    const us = await this.prisma.user.findUnique({
+    const us = await prisma.user.findUnique({
       where: { id },
       include: {
         end: true,
@@ -27,21 +26,22 @@ export class UsersRespository implements IUsersRepository {
     return us;
   }
 
-  public async create(data: IUserDtos, end: IEndDto): Promise<User> {
-    const user = await this.prisma.user.create({
+  public async create(
+    data: Prisma.UserCreateInput,
+    end: IEndDto,
+  ): Promise<User> {
+    const user = await prisma.user.create({
       data: {
-        name: data.name,
-        midle_name: data.midle_name,
-        email: data.email,
-        password: data.password,
+        ...data,
         end: {
           create: {
-            city: end.city,
-            bairro: end.bairro,
-            cep: end.cep,
-            number_home: end.number_home,
-            state: end.state,
             street: end.street,
+            locality: end.locality,
+            number_home: end.home_number,
+            city: end.city,
+            state: end.city,
+            region_code: end.region_code,
+            postal_code: end.postal_code,
           },
         },
 
@@ -54,5 +54,11 @@ export class UsersRespository implements IUsersRepository {
     });
 
     return user;
+  }
+
+  public async findCpf(cpf: string): Promise<User | null> {
+    const find = await prisma.user.findUnique({ where: { cpf } });
+
+    return find;
   }
 }

@@ -9,16 +9,19 @@ import { inject, injectable } from 'tsyringe';
 import { IUsersRepository } from '../repositories/IUsersRespository';
 
 interface Props {
-  name: string;
-  midle_name: string;
-  password: string;
+  full_name: string;
   email: string;
+  password: string;
+  cpf: string;
+  phone_area: string;
+  phone_number: string;
   street: string;
-  bairro: string;
-  number_home: string;
+  locality: string;
+  home_number: string;
   city: string;
   state: string;
-  cep: string;
+  region_code: string;
+  postal_code: string;
 }
 
 @injectable()
@@ -32,18 +35,22 @@ export class CreateUserService {
   ) {}
 
   async execute({
-    name,
-    midle_name,
-    password,
+    full_name,
     email,
+    password,
+    cpf,
+    phone_area,
+    phone_number,
     street,
-    bairro,
-    number_home,
+    locality,
+    home_number,
     city,
     state,
-    cep,
+    region_code,
+    postal_code,
   }: Props): Promise<User> {
     const find = await this.userRepository.findUserByEmail(email);
+    const findCpf = await this.userRepository.findCpf(cpf);
 
     if (find) {
       throw new Err(
@@ -51,27 +58,34 @@ export class CreateUserService {
       );
     }
 
+    if (findCpf) {
+      throw new Err(
+        'CPF já está cadastrado. Tente novamente com um CPF diferente',
+      );
+    }
+
     const has = await hash(password, 8);
     const dataUser = {
-      name,
-      midle_name,
-      password: has,
+      full_name,
       email,
+      password: has,
+      cpf,
+      phone_area,
+      phone_number,
     };
 
     const dataEnd = {
       street,
-      bairro,
+      locality,
+      home_number,
+      region_code,
+      postal_code,
       city,
       state,
-      cep,
-      number_home,
     };
 
+    await this.cache.invalidate('user');
     const createUser = await this.userRepository.create(dataUser, dataEnd);
-
-    await this.cache.invalidate('users');
-    await this.cache.invalidatePrefix(`individualPonts`);
 
     return createUser;
   }

@@ -21,35 +21,45 @@ let CreateUserService = (_dec = (0, _tsyringe.injectable)(), _dec2 = function (t
     this.cache = cache;
   }
   async execute({
-    name,
-    midle_name,
-    password,
+    full_name,
     email,
+    password,
+    cpf,
+    phone_area,
+    phone_number,
     street,
-    bairro,
-    number_home,
+    locality,
+    home_number,
     city,
     state,
-    cep
+    region_code,
+    postal_code
   }) {
     const find = await this.userRepository.findUserByEmail(email);
+    const findCpf = await this.userRepository.findCpf(cpf);
     if (find) {
       throw new _AppError.Err('Esse usuário já está cadastrado. Tente novamente com um email diferente');
     }
+    if (findCpf) {
+      throw new _AppError.Err('CPF já está cadastrado. Tente novamente com um CPF diferente');
+    }
     const has = await (0, _bcryptjs.hash)(password, 8);
     const dataUser = {
-      name,
-      midle_name,
+      full_name,
+      email,
       password: has,
-      email
+      cpf,
+      phone_area,
+      phone_number
     };
     const dataEnd = {
       street,
-      bairro,
+      locality,
+      home_number,
+      region_code,
+      postal_code,
       city,
-      state,
-      cep,
-      number_home
+      state
     };
     const createUser = await this.userRepository.create(dataUser, dataEnd);
     await this.cache.invalidate('users');

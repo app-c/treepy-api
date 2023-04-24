@@ -20,20 +20,22 @@ exports.pay = pay;
 const pag = _axios.default.create({
   baseURL: 'https://sandbox.api.pagseguro.com/'
 });
-pay.post('/session', async (req, res) => {
-  const resp = await pag.post('/sessions?appId=app5679017007&appKey=4033C10F0000C47AA4AF7F85B5EC75F5');
+pay.get('/session', async (req, res) => {
+  const resp = await _axios.default.post(` https://ws.sandbox.pagseguro.uol.com.br/sessions?appId=${_env.env.APP_ID}&appKey=${_env.env.APP_KEY}`);
   const rs = resp.data;
-  const dt = null;
   const parser = new _xml2js.default.Parser();
   parser.parseString(rs, (err, result) => {
-    return res.json(result);
+    const token_id = {
+      id: result.session.id[0]
+    };
+    return res.json(token_id);
   });
 });
-pay.post('/brand', async (req, res) => {
+pay.get('/brand', async (req, res) => {
   const {
     tk,
     creditCard
-  } = req.body;
+  } = req.params;
   const resp = await _axios.default.get('https://df.uol.com.br/df-fe/mvc/creditcard/v1/getBin', {
     params: {
       tk,
@@ -42,23 +44,30 @@ pay.post('/brand', async (req, res) => {
   });
   return res.json(resp.data);
 });
-pay.post('/parc', async (req, res) => {
+pay.get('/parc/:value', async (req, res) => {
   const {
-    installment,
-    brand,
-    amount,
-    sessionId
-  } = req.body;
-  const resp = await _axios.default.get(' https://sandbox.pagseguro.uol.com.br/checkout/v2/installments.json', {
-    params: {
-      sessionId,
-      amount,
-      creditCardBrand: brand,
-      maxInstallmentNoInterest: installment
-    }
-  });
-  return res.json(resp.data);
+    value
+  } = req.params;
+  pag.defaults.headers.common.Authorization = `Bearer ${_env.env.PAG_TOKEN}`;
+  await pag.get(`/charges/fees/calculate?payment_methods=credit_card&value=${value}`).then(h => {
+    const rs = h.data;
+    return res.json(rs);
+  }).catch(h => res.json(h.response.data));
+  // const { installment, brand, amount, sessionId } = req.body;
+
+  // const resp = await axios.get(
+  //   ' https://sandbox.pagseguro.uol.com.br/checkout/v2/installments.json',
+  //   {
+  //     params: {
+  //       sessionId,
+  //       amount,
+  //       creditCardBrand: brand,
+  //       maxInstallmentNoInterest: installment,
+  //     },
+  //   },
+  // );
 });
+
 pay.post('/card', async (req, res) => {
   pag.defaults.headers.common.Authorization = `Bearer ${_env.env.PAG_TOKEN}`;
   const {
@@ -66,8 +75,7 @@ pay.post('/card', async (req, res) => {
     email,
     area,
     phone_number,
-    name_item,
-    reference_item_id,
+    tax_id,
     amount,
     street,
     home_number,
@@ -76,7 +84,6 @@ pay.post('/card', async (req, res) => {
     city,
     region_code,
     postal_code,
-    description,
     installments,
     number_card,
     exp_month,
@@ -84,13 +91,12 @@ pay.post('/card', async (req, res) => {
     security_code,
     holder_name
   } = req.body;
-  const id = '12345';
   await pag.post('/orders', {
     reference_id: 'ex-00001',
     customer: {
       name,
       email,
-      tax_id: '12345678909',
+      tax_id,
       phones: [{
         country: '55',
         area,
@@ -142,10 +148,161 @@ pay.post('/card', async (req, res) => {
     }]
   }).then(h => {
     const rs = h.data;
-    console.log(rs);
+    return res.json(rs);
+  }).catch(h => {
+    console.log(h.response.statusCode);
+    return res.json(h);
+  });
+});
+pay.post('/boleto', async (req, res) => {
+  pag.defaults.headers.common.Authorization = `Bearer ${_env.env.PAG_TOKEN}`;
+  const {
+    name,
+    email,
+    area,
+    phone_number,
+    amount,
+    street,
+    home_number,
+    complement,
+    locality,
+    city,
+    region_code,
+    postal_code,
+    holder_name,
+    due_date,
+    region
+  } = req.body;
+  await pag.post('/orders', {
+    reference_id: 'ex-00001',
+    customer: {
+      name,
+      email,
+      tax_id: '12345678909',
+      phones: [{
+        country: '55',
+        area,
+        number: phone_number,
+        type: 'MOBILE'
+      }]
+    },
+    items: [{
+      reference_id: 'treepycache',
+      name: 'TreepyCache',
+      quantity: 1,
+      unit_amount: amount
+    }],
+    shipping: {
+      address: {
+        street,
+        number: home_number,
+        complement,
+        locality,
+        city,
+        region_code,
+        country: 'BRA',
+        postal_code
+      }
+    },
+    notification_urls: ['https://meusite.com/notificacoes'],
+    charges: [{
+      reference_id: 'treepycache',
+      description: 'Compra de TreepyCache',
+      amount: {
+        value: amount,
+        currency: 'BRL'
+      },
+      payment_method: {
+        type: 'BOLETO',
+        boleto: {
+          due_date,
+          instruction_lines: {
+            line_1: 'Pagamento processado para DESC Fatura',
+            line_2: 'Via Treepy'
+          },
+          holder: {
+            name: holder_name,
+            tax_id: '22222222222',
+            email,
+            address: {
+              country: 'Brasil',
+              region,
+              region_code,
+              city,
+              postal_code,
+              street,
+              number: home_number,
+              locality
+            }
+          }
+        }
+      }
+    }]
+  }).then(h => {
+    const rs = h.data;
     return res.json(rs);
   }).catch(h => {
     console.log(h);
-    // return res.json(h.response);
+  });
+});
+pay.post('/pix', async (req, res) => {
+  pag.defaults.headers.common.Authorization = `Bearer ${_env.env.PAG_TOKEN}`;
+  const {
+    name,
+    email,
+    area,
+    phone_number,
+    amount,
+    street,
+    home_number,
+    complement,
+    locality,
+    city,
+    region_code,
+    postal_code,
+    expiration_date
+  } = req.body;
+  await pag.post('/orders', {
+    reference_id: 'ex-00001',
+    customer: {
+      name,
+      email,
+      tax_id: '12345678909',
+      phones: [{
+        country: '55',
+        area,
+        number: phone_number,
+        type: 'MOBILE'
+      }]
+    },
+    items: [{
+      name: 'TreepyCache',
+      quantity: 1,
+      unit_amount: amount
+    }],
+    qr_codes: [{
+      amount: {
+        value: amount
+      },
+      expiration_date
+    }],
+    shipping: {
+      address: {
+        street,
+        number: home_number,
+        complement,
+        locality,
+        city,
+        region_code,
+        country: 'BRA',
+        postal_code
+      }
+    },
+    notification_urls: ['https://meusite.com/notificacoes']
+  }).then(h => {
+    const rs = h.data;
+    return res.json(rs);
+  }).catch(h => {
+    console.log(h);
   });
 });
