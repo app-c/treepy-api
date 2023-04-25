@@ -7,8 +7,8 @@ services:
       - 5432:5432
     environment:
       # - POSTGRESQL_USERNAME=api
-      - POSTGRESQL_PASSWORD=camaleao
-      # - POSTGRESQL_DATABASE=TREEPY
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=TREEPY
   redis:
     image: bitnami/redis:latest
     ports: 

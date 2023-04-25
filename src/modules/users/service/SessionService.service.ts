@@ -16,8 +16,8 @@ interface IRequest {
 interface IResponse {
   user: {
     id: string;
-    name: string;
-    midle_name: string;
+    full_name: string;
+    email: string
   };
   token: string;
 }
@@ -51,8 +51,7 @@ export class SessionService {
     const user = {
       user: {
         id: findUser.id,
-        name: findUser.name,
-        midle_name: findUser.midle_name,
+        full_name: findUser.full_name,
         email: findUser.email,
       },
       token,

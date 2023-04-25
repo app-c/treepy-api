@@ -1,7 +1,6 @@
 export interface IUserDtos {
   id?: string;
-  name: string;
-  midle_name: string;
+  full_name: string;
   password: string;
   email: string;
   profile?: IProfileDto;

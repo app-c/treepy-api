@@ -37,7 +37,7 @@ export class UsersRespository implements IUsersRepository {
           create: {
             street: end.street,
             locality: end.locality,
-            number_home: end.home_number,
+            home_number: end.home_number,
             city: end.city,
             state: end.city,
             region_code: end.region_code,

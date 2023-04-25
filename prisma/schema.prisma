@@ -27,7 +27,7 @@ model End {
   id          String @id @default(uuid())
   street      String
   locality    String
-  number_home String
+  home_number String
   city        String
   state       String
   region_code String
