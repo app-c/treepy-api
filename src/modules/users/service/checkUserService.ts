@@ -39,7 +39,7 @@ export class checkMailService {
       );
     }
 
-    await this.cache.invalidate('users');
-    await this.cache.invalidatePrefix(`individualPonts`);
+    // await this.cache.invalidate('users');
+    // await this.cache.invalidatePrefix(`individualPonts`);
   }
 }
