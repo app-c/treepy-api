@@ -2,6 +2,7 @@
 import { checkMailService } from '@modules/users/service/checkUserService';
 import { CreateUserService } from '@modules/users/service/CreateUserService';
 import { findUser } from '@modules/users/service/findUserService';
+import { resePassService } from '@modules/users/service/resetPassService';
 import { SendForgotPasswordEmailService } from '@modules/users/service/SendForgotPasswordEmailService';
 import { SessionService } from '@modules/users/service/SessionService.service';
 import axios from 'axios';
@@ -69,6 +70,19 @@ export class UserController {
 
     const sess = await service.execute({
       email,
+    });
+
+    return res.json(sess);
+  }
+
+  async resePassword(req: Request, res: Response): Promise<Response> {
+    const service = container.resolve(resePassService);
+
+    const { token, password } = req.body;
+
+    const sess = await service.execute({
+      password,
+      token,
     });
 
     return res.json(sess);

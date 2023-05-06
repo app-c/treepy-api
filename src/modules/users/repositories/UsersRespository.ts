@@ -61,4 +61,13 @@ export class UsersRespository implements IUsersRepository {
 
     return find;
   }
+
+  public async resePassWord(password: string, user_id: string): Promise<void> {
+    await prisma.user.update({
+      where: { id: user_id },
+      data: {
+        password,
+      },
+    });
+  }
 }

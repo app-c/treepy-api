@@ -5,10 +5,8 @@ export default class UserTokenRepository implements IUserTokenRepository {
   private prisma = new PrismaClient();
 
   public async findByToken(token: string): Promise<user_tokens | null> {
-    const userToken = await this.prisma.user_tokens.findFirst({
-      where: {
-        token,
-      },
+    const userToken = await this.prisma.user_tokens.findUnique({
+      where: { token },
     });
 
     return userToken;

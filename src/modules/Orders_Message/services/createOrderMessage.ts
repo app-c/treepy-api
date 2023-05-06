@@ -21,10 +21,9 @@ export class createOrderMessage {
     private cache: ICacheProvider,
   ) {}
 
-  async create({
-    message,
-  }: Prisma.Orders_MessageCreateInput): Promise<Orders_Message> {
+  async create(message: string): Promise<any> {
     const create = await this.repoOrders_Message.create({ message });
+    console.log(message);
 
     return create;
   }

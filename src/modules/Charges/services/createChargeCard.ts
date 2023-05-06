@@ -8,7 +8,7 @@ import { hash } from 'bcryptjs';
 import { inject, injectable } from 'tsyringe';
 import { v4 as uuidv4 } from 'uuid';
 
-import { env } from '../../../env';
+import { env } from '../../../shared/env';
 import { IChargeDto, ISumary } from '../dto';
 import { IChargesRepository } from '../repositories/IRepository/IChargesRepository';
 
@@ -115,7 +115,9 @@ export class createChargeCard {
             postal_code,
           },
         },
-        notification_urls: ['https://meusite.com/notificacoes'],
+        notification_urls: [
+          'https://treepy.app-com.digital/orders/create-orders_message',
+        ],
         charges: [
           {
             reference_id: '123',
@@ -171,7 +173,7 @@ export class createChargeCard {
         }
       })
       .catch(h => {
-        console.log(h.response);
+        console.log(h.response.data.error_messages);
       });
 
     if (message === 'Pagamento recusado') {

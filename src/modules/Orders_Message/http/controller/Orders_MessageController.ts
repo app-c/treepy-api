@@ -5,13 +5,9 @@ import { container } from 'tsyringe';
 
 export class Orders_MessageController {
   async create(req: Request, res: Response): Promise<Response> {
-    const service = container.resolve(createOrderMessage);
-
-    const { message } = req.body;
-
-    const create = await service.create({ message });
-
-    return res.json(create);
+    // const service = container.resolve(createOrderMessage);
+    console.log('response', req.body);
+    return res.send();
   }
 
   async listMany(req: Request, res: Response): Promise<Response> {

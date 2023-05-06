@@ -16,6 +16,7 @@ user.get('/check-mail/:mail/:cpf', control.checkMail);
 user.get('/find-user/', Auth, control.findUser);
 
 user.post('/send-forgot-password', control.sendForgotPassword);
+user.put('/reset-password', control.resePassword);
 
 // user.use(Auth);
 

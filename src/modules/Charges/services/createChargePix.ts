@@ -9,7 +9,7 @@ import moment from 'moment';
 import { inject, injectable } from 'tsyringe';
 import { v4 as uuidv4 } from 'uuid';
 
-import { env } from '../../../env';
+import { env } from '../../../shared/env';
 import { IChargeDto, IPix, ISumary } from '../dto';
 import { charges } from '../http/routes/charges';
 import { IChargesRepository } from '../repositories/IRepository/IChargesRepository';

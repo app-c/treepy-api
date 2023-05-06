@@ -45,7 +45,7 @@ export class SendForgotPasswordEmailService {
         name: user.name,
         email: user.email,
       },
-      subject: '[DaisyNails] Recuperaçao de senha',
+      subject: '[Treepy] Recuperaçao de senha',
       templateData: {
         file: forgotPassword,
         variables: {

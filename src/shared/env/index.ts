@@ -19,10 +19,14 @@ const envScheme = z.object({
   REDIS_PASS: z.string(),
   PORT: z.string(),
   PAG_TOKEN: z.string(),
-  USER: z.string(),
   END: z.string(),
   APP_KEY: z.string(),
   APP_ID: z.string(),
+
+  USER: z.string(),
+  USER_TOKEN: z.string(),
 });
 
-export const env = envScheme.parse(process.env);
+const env = envScheme.parse(process.env);
+
+export { env };
