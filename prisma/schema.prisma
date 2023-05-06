@@ -74,6 +74,6 @@ model Sumary {
 
 model Orders_Message {
   id         String   @id @default(uuid())
-  message    Json
+  message    String
   created_at DateTime @default(now())
 }
