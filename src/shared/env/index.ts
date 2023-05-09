@@ -18,7 +18,10 @@ const envScheme = z.object({
   REDIS_PORT: z.string(),
   REDIS_PASS: z.string(),
   PORT: z.string(),
+
   PAG_TOKEN: z.string(),
+  PAG_PRODUCTION_TOKEN: z.string(),
+
   END: z.string(),
   APP_KEY: z.string(),
   APP_ID: z.string(),

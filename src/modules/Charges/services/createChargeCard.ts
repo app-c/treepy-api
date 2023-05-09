@@ -28,11 +28,9 @@ interface props {
   region_code: string;
   postal_code: string;
   installments: string;
-  number_card: string;
-  exp_month: string;
-  exp_year: string;
   security_code: string;
   holder_name: string;
+  encrypted: string;
 }
 
 @injectable()
@@ -61,11 +59,7 @@ export class createChargeCard {
     region_code,
     postal_code,
     installments,
-    number_card,
-    exp_month,
-    exp_year,
-    security_code,
-    holder_name,
+    encrypted,
   }: props): Promise<Charges> {
     const pag = axios.create({
       baseURL: 'https://sandbox.api.pagseguro.com/',
@@ -73,7 +67,7 @@ export class createChargeCard {
 
     pag.defaults.headers.common.Authorization = `Bearer ${env.PAG_TOKEN}`;
 
-    let data = {} as IChargeDto;
+    let data = {};
     let sumary = {} as ISumary;
 
     let message = '';
@@ -130,15 +124,14 @@ export class createChargeCard {
               type: 'CREDIT_CARD',
               installments,
               capture: true,
+
               card: {
-                number: number_card,
-                exp_month,
-                exp_year,
-                security_code,
+                encrypted,
+                security_code: '123',
                 holder: {
-                  name: holder_name,
+                  name: 'Jose da Silva',
                 },
-                store: true,
+                store: false,
               },
             },
           },
@@ -146,6 +139,7 @@ export class createChargeCard {
       })
       .then(h => {
         const rs = h.data as IResponseCard;
+        data = rs;
 
         if (rs.charges[0].status === 'DECLINED') {
           message = 'Pagamento recusado';

@@ -109,7 +109,7 @@ export class createChargeBoleto {
             postal_code,
           },
         },
-        notification_urls: ['https://meusite.com/notificacoes'],
+        notification_urls: ['https://treepy.web.app/orders/webhooks'],
         charges: [
           {
             reference_id,

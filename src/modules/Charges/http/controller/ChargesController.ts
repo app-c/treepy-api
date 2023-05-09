@@ -24,11 +24,9 @@ export class ChargesController {
       region_code,
       postal_code,
       installments,
-      number_card,
-      exp_month,
-      exp_year,
       security_code,
       holder_name,
+      encrypted,
     } = req.body;
 
     const fk_user_id = req.user.id;
@@ -49,11 +47,9 @@ export class ChargesController {
       region_code,
       postal_code,
       installments,
-      number_card,
-      exp_month,
-      exp_year,
       security_code,
       holder_name,
+      encrypted,
     });
 
     return res.json(create);

@@ -117,6 +117,8 @@ export class createChargePix {
       .then(h => {
         const rs = h.data as IPix;
 
+        console.log(rs);
+
         const code = rs.qr_codes[0];
 
         data = {
