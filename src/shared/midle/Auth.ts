@@ -5,32 +5,32 @@ import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 
 interface ITokenPayload {
-   iat: number;
-   exp: number;
-   sub: string;
+  iat: number;
+  exp: number;
+  sub: string;
 }
 
 export function Auth(req: Request, res: Response, next: NextFunction) {
-   const authHeader = req.headers.authorization;
+  const authHeader = req.headers.authorization;
 
-   if (!authHeader) {
-      throw new Err('falta o token');
-   }
+  if (!authHeader) {
+    throw new Err('token invalido');
+  }
 
-   const [, token] = authHeader.split(' ');
+  const [, token] = authHeader.split(' ');
 
-   try {
-      const { secret } = auth.jwt;
-      const decode = verify(token, secret);
+  try {
+    const { secret } = auth.jwt;
+    const decode = verify(token, secret);
 
-      const { sub } = decode as ITokenPayload;
+    const { sub } = decode as ITokenPayload;
 
-      req.user = {
-         id: sub,
-      };
+    req.user = {
+      id: sub,
+    };
 
-      return next();
-   } catch (err) {
-      throw new Err('token invalido');
-   }
+    return next();
+  } catch (err) {
+    throw new Err('token invalido');
+  }
 }

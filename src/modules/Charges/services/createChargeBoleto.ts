@@ -149,8 +149,6 @@ export class createChargeBoleto {
       .then(h => {
         const rs = h.data as IResponseCard;
 
-        console.log(rs);
-
         if (rs.charges[0].status === 'WAITING') {
           const charge = rs.charges[0];
 
