@@ -34,21 +34,7 @@ export class UsersRespository implements IUsersRepository {
       data: {
         ...data,
         end: {
-          create: {
-            street: end.street,
-            locality: end.locality,
-            home_number: end.home_number,
-            city: end.city,
-            state: end.city,
-            region_code: end.region_code,
-            postal_code: end.postal_code,
-          },
-        },
-
-        profile: {
-          create: {
-            avatar: 'avatar',
-          },
+          create: end,
         },
       },
     });

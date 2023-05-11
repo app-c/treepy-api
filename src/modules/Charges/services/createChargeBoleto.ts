@@ -61,10 +61,10 @@ export class createChargeBoleto {
     region,
   }: props): Promise<any> {
     const pag = axios.create({
-      baseURL: 'https://sandbox.api.pagseguro.com/',
+      baseURL: 'https://api.pagseguro.com/',
     });
 
-    pag.defaults.headers.common.Authorization = `Bearer ${env.PAG_TOKEN}`;
+    pag.defaults.headers.common.Authorization = `Bearer ${env.PAG_PRODUCTION_TOKEN}`;
 
     let data = {} as IChargeDto;
     let sumary = {} as ISumary;
@@ -109,7 +109,7 @@ export class createChargeBoleto {
             postal_code,
           },
         },
-        notification_urls: ['https://treepy.web.app/orders/webhooks'],
+        notification_urls: ['https://treepy.web.app/orders/hooks'],
         charges: [
           {
             reference_id,

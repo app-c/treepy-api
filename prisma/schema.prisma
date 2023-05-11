@@ -72,8 +72,8 @@ model Sumary {
   charge       Charges @relation(fields: [fk_charge_id], references: [id])
 }
 
-model Orders_Message {
+model WebHooks {
   id         String   @id @default(uuid())
-  message    String
+  message    Json
   created_at DateTime @default(now())
 }

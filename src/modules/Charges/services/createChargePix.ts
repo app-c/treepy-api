@@ -56,11 +56,13 @@ export class createChargePix {
     region_code,
     postal_code,
   }: props): Promise<any> {
+    const dev = 'https://sandbox.api.pagseguro.com/';
+    const production = 'https://api.pagseguro.com/';
     const pag = axios.create({
-      baseURL: 'https://sandbox.api.pagseguro.com/',
+      baseURL: production,
     });
 
-    pag.defaults.headers.common.Authorization = `Bearer ${env.PAG_TOKEN}`;
+    pag.defaults.headers.common.Authorization = `Bearer ${env.PAG_PRODUCTION_TOKEN}`;
 
     let data = {};
     const sumary = {} as ISumary;
@@ -112,12 +114,10 @@ export class createChargePix {
             postal_code,
           },
         },
-        notification_urls: ['https://meusite.com/notificacoes'],
+        notification_urls: ['https://2d9e-177-47-86-171.ngrok-free.app/hook'],
       })
       .then(h => {
         const rs = h.data as IPix;
-
-        console.log(rs);
 
         const code = rs.qr_codes[0];
 

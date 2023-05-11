@@ -6,6 +6,7 @@ import { Err } from '@shared/errors/AppError';
 import axios from 'axios';
 import { hash } from 'bcryptjs';
 import { inject, injectable } from 'tsyringe';
+import { paymentResponse } from 'utils/payment-response';
 import { v4 as uuidv4 } from 'uuid';
 
 import { env } from '../../../shared/env';
@@ -60,14 +61,17 @@ export class createChargeCard {
     postal_code,
     installments,
     encrypted,
-  }: props): Promise<Charges> {
+  }: props): Promise<any> {
+    const url_dev = 'https://sandbox.api.pagseguro.com/';
+    const url_production = 'https://api.pagseguro.com/';
+
     const pag = axios.create({
-      baseURL: 'https://sandbox.api.pagseguro.com/',
+      baseURL: url_production,
     });
 
-    pag.defaults.headers.common.Authorization = `Bearer ${env.PAG_TOKEN}`;
+    pag.defaults.headers.common.Authorization = `Bearer ${env.PAG_PRODUCTION_TOKEN}`;
 
-    let data = {};
+    let data = null;
     let sumary = {} as ISumary;
 
     let message = '';
@@ -109,9 +113,7 @@ export class createChargeCard {
             postal_code,
           },
         },
-        notification_urls: [
-          'https://treepy.app-com.digital/orders/create-orders_message',
-        ],
+        notification_urls: ['https://treepy.app-com.digital/hook'],
         charges: [
           {
             reference_id: '123',
@@ -137,12 +139,12 @@ export class createChargeCard {
           },
         ],
       })
-      .then(h => {
+      .then(async h => {
         const rs = h.data as IResponseCard;
-        data = rs;
 
         if (rs.charges[0].status === 'DECLINED') {
-          message = 'Pagamento recusado';
+          data = rs.charges[0];
+          message = paymentResponse[rs.charges[0].payment_response.code];
         }
 
         if (
@@ -164,19 +166,22 @@ export class createChargeCard {
             paid: charge.amount.summary.paid,
             total: charge.amount.summary.total,
           };
+
+          await this.repoCharges.create(data, sumary);
         }
       })
       .catch(h => {
-        console.log(h.response.data.error_messages);
+        data = h.response.data.error_messages;
       });
 
-    if (message === 'Pagamento recusado') {
-      throw new Err('Pagamento recusado', 401);
+    if (message !== '') {
+      throw new Err(
+        'Erro ao processar o pagamento, verefique os campos ou contate o seu banco',
+        401,
+      );
     }
 
-    const create = await this.repoCharges.create(data, sumary);
-
-    return create;
+    return { data, message };
   }
 
   async findById(id: string): Promise<Charges> {
