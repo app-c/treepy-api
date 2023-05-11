@@ -15,7 +15,7 @@ import { env } from '../../../../shared/env';
 
 const pay = Router();
 const pag = axios.create({
-  baseURL: 'https://sandbox.api.pagseguro.com/',
+  baseURL: 'https://api.pagseguro.com/',
 });
 
 pay.get('/session', async (req, res) => {
@@ -49,7 +49,7 @@ pay.get('/brand', async (req, res) => {
 
 pay.get('/parc/:value', async (req, res) => {
   const { value } = req.params;
-  pag.defaults.headers.common.Authorization = `Bearer ${env.PAG_TOKEN}`;
+  pag.defaults.headers.common.Authorization = `Bearer ${env.PAG_PRODUCTION_TOKEN}`;
 
   await pag
     .get(`/charges/fees/calculate?payment_methods=credit_card&value=${value}`)
