@@ -6,10 +6,10 @@ import { Err } from '@shared/errors/AppError';
 import axios from 'axios';
 import { hash } from 'bcryptjs';
 import { inject, injectable } from 'tsyringe';
-import { paymentResponse } from 'utils/payment-response';
 import { v4 as uuidv4 } from 'uuid';
 
 import { env } from '../../../shared/env';
+import { paymentResponse } from '../../../utils/payment-response';
 import { IChargeDto, ISumary } from '../dto';
 import { IChargesRepository } from '../repositories/IRepository/IChargesRepository';
 
