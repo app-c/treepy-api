@@ -11,16 +11,17 @@ generator client {
 }
 
 model User {
-  id           String    @id @default(uuid())
+  id           String      @id @default(uuid())
   full_name    String
   email        String
   password     String
-  cpf          String    @unique()
+  cpf          String      @unique()
   phone_area   String
   phone_number String
   end          End?
   profile      Profile?
   Charges      Charges[]
+  Permissons   Permissons?
 }
 
 model End {
@@ -76,4 +77,12 @@ model WebHooks {
   id         String   @id @default(uuid())
   message    Json
   created_at DateTime @default(now())
+}
+
+model Permissons {
+  id            String  @id @default(uuid())
+  termos        Boolean @default(false)
+  notifications Boolean @default(false)
+  userId        String  @unique
+  user          User    @relation(fields: [userId], references: [id])
 }

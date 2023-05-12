@@ -6,6 +6,7 @@ import { Err } from '@shared/errors/AppError';
 import { hash } from 'bcryptjs';
 import { inject, injectable } from 'tsyringe';
 
+import { IPermission } from '../dto';
 import { IUsersRepository } from '../repositories/IUsersRespository';
 
 interface Props {
@@ -22,6 +23,14 @@ interface Props {
   state: string;
   region_code: string;
   postal_code: string;
+  termos: boolean;
+  notifications: boolean;
+}
+
+interface IResponse {
+  user: IUserDtos;
+  end: IEndDto;
+  permissions: IPermission;
 }
 
 @injectable()
@@ -48,7 +57,9 @@ export class CreateUserService {
     state,
     region_code,
     postal_code,
-  }: Props): Promise<User> {
+    notifications,
+    termos,
+  }: Props): Promise<IResponse> {
     const find = await this.userRepository.findUserByEmail(email);
     const findCpf = await this.userRepository.findCpf(cpf);
 
@@ -65,7 +76,7 @@ export class CreateUserService {
     }
 
     const has = await hash(password, 8);
-    const dataUser = {
+    const user = {
       full_name,
       email,
       password: has,
@@ -74,7 +85,7 @@ export class CreateUserService {
       phone_number,
     };
 
-    const dataEnd = {
+    const end = {
       street,
       locality,
       home_number,
@@ -84,9 +95,18 @@ export class CreateUserService {
       state,
     };
 
-    // await this.cache.invalidate('user');
-    const createUser = await this.userRepository.create(dataUser, dataEnd);
+    const permissions = {
+      notifications,
+      termos,
+    };
 
-    return createUser;
+    // await this.cache.invalidate('user');
+    const createUser = await this.userRepository.create(user, end, permissions);
+
+    return {
+      user: createUser,
+      end,
+      permissions,
+    };
   }
 }

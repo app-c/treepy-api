@@ -29,6 +29,8 @@ export class UserController {
       state,
       region_code,
       postal_code,
+      termos,
+      notifications,
     } = req.body;
 
     const user = await service.execute({
@@ -45,7 +47,11 @@ export class UserController {
       state,
       region_code,
       postal_code,
+      termos,
+      notifications,
     });
+
+    delete user.user.password;
 
     return res.json(user);
   }

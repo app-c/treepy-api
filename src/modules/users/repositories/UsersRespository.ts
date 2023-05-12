@@ -3,6 +3,7 @@ import { PrismaClient, User, Prisma } from '@prisma/client';
 import { IEndDto, IUserDtos } from '@shared/dtos';
 
 import { prisma } from '../../../utils/prisma';
+import { IPermission } from '../dto';
 import { IUsersRepository } from './IUsersRespository';
 
 export class UsersRespository implements IUsersRepository {
@@ -29,12 +30,16 @@ export class UsersRespository implements IUsersRepository {
   public async create(
     data: Prisma.UserCreateInput,
     end: IEndDto,
+    permission: IPermission,
   ): Promise<User> {
     const user = await prisma.user.create({
       data: {
         ...data,
         end: {
           create: end,
+        },
+        Permissons: {
+          create: permission,
         },
       },
     });
