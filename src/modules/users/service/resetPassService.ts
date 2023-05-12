@@ -31,21 +31,19 @@ export class resePassService {
   async execute({ password, token }: Props): Promise<any> {
     const userToken = await this.userToken.findByToken(token);
 
-    console.log(userToken);
-
     if (!userToken) {
       throw new Err('Token inválido');
     }
     const user = await this.userRepository.findUserById(userToken.user_id);
 
-    // if (!user) {
-    //   throw new Err('Usuário não encontrado');
-    // }
+    if (!user) {
+      throw new Err('Usuário não encontrado');
+    }
 
-    // const pass = await hash(password, 8);
+    const pass = await hash(password, 8);
 
-    // await this.userRepository.resePassWord(pass, user.id);
+    await this.userRepository.resePassWord(pass, user.id);
 
-    return userToken;
+    return user;
   }
 }

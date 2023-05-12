@@ -14,8 +14,8 @@ export default {
 
   defaults: {
     from: {
-      email: 'william@app-com.digital',
-      name: 'william',
+      email: 'contato@treepy.com.br',
+      name: 'Marcos Tonoli',
     },
   },
 } as IMailConfig;
