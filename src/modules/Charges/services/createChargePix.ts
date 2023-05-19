@@ -114,7 +114,7 @@ export class createChargePix {
             postal_code,
           },
         },
-        notification_urls: ['https://2d9e-177-47-86-171.ngrok-free.app/hook'],
+        notification_urls: ['https://treepy.app-com.digital/hook'],
       })
       .then(h => {
         const rs = h.data as IPix;
